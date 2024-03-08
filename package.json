@@ -1,0 +1,19 @@
+{
+  "name": "course-api",
+  "version": "1.0.0",
+  "description": "Design database and APIs for application based courses on Airtribe.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "course",
+    "RESTful",
+    "api"
+  ],
+  "author": "Rishav Choudhary",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.3"
+  }
+}
