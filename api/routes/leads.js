@@ -10,7 +10,7 @@ router.get('/:info', (req, res, next) => {
 
 router.patch('/:status', (req, res, next) => {
     res.status(200).json({
-        status : 'lead status is '+req.params.status
+        status: `lead status is ${req.params.status}`
     });
 });
 

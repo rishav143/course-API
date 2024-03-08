@@ -6,3 +6,5 @@ router.post('/', (req, res, next) => {
         message : 'added comment sucessfully'
     });
 });
+
+module.exports = router;

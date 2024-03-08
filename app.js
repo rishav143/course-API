@@ -5,6 +5,7 @@ const courseRoutes = require('./api/routes/courses');
 const leadRoutes = require('./api/routes/leads');
 const commentRoutes = require('./api/routes/comments');
 
+//Routes which should handle requests
 app.use('/courses', courseRoutes);
 app.use('/leads', leadRoutes);
 app.use('/comments', commentRoutes);
