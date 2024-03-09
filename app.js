@@ -1,9 +1,13 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 
 const courseRoutes = require('./api/routes/courses');
 const leadRoutes = require('./api/routes/leads');
 const commentRoutes = require('./api/routes/comments');
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 //Routes which should handle requests
 app.use('/courses', courseRoutes);
