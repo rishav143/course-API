@@ -21,15 +21,16 @@ app.use(bodyParser.json());
 
 // to prevent CORS errors
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept, Authorization"
     );
-    if(req.method === 'OPTIONS') {
-        res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE')
+    if (req.method === 'OPTIONS') {
+        res.setHeader('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE');
         return res.status(200).json({});
     }
+    next();
 });
 
 //Routes which should handle requests
@@ -38,7 +39,7 @@ app.use('/leads', leadRoutes);
 app.use('/comments', commentRoutes);
 
 app.use((req, res, next) => {
-    const error = new error('Not found');
+    const error = new Error('Not found');
     error.status(404);
     next(error);
 })
