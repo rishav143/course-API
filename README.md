@@ -5,10 +5,12 @@ Design database and APIs for application based courses on Airtribe.
 # Usage
 1. Open project's configuration file, usually named .env or similar.
 2. Add the following environment variable with your MongoDB Atlas password:
+```   
 {
     "env": {
         "MONGO_ATLAS_PW": "node-api" // add your mongodb password here
     }
 }
-3. Save the changes to your configuration file.
+```
+4. Save the changes to your configuration file.
 Now, your Node.js application can access the MongoDB Atlas password securely through the process.env.MONGO_ATLAS_PW variable.
