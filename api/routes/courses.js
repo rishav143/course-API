@@ -57,12 +57,13 @@ router.post('/', upload.single('courseImage'), async (req, res, next) => {
         return res.status(400).json({ error: 'No image file uploaded' });
     }
 
-    // 2. Validate Course Data (including instructor ID)
     try {
-        const { name, max_seats, start_date, instructorId } = req.body;
 
-        if (!name || !max_seats || !start_date || !instructorId) {
-            throw new Error('Missing required course data (name, max_seats, start_date, instructorId)');
+        // validate course data
+        const { name, max_seats, start_date, instructor_id } = req.body;
+
+        if (!name || !max_seats || !start_date || !instructor_id) {
+            throw new Error('Missing required course data (name, max_seats, start_date, instructor_id)');
         }
 
         const maxSeatsNumber = Number(max_seats);
@@ -79,31 +80,22 @@ router.post('/', upload.single('courseImage'), async (req, res, next) => {
             throw new Error('Invalid start_date format (YYYY-MM-DD)');
         }
 
-        // **Instructor ID Validation (replace with your logic):**
-        // - Fetch instructor data using instructorId
-        // - Check if instructor exists and is active
-        // - Throw an error if validation fails
-
-        const instructor = await Instructor.findById(instructorId);
-        if (!instructor || !instructor.isActive) {
-            throw new Error('Invalid or inactive instructor ID');
+        //validate instructor id in existing database
+        const instructor = await Instructor.findById(instructor_id);
+        if (!instructor) {
+            throw new Error('Invalid instructor ID');
         }
-    } catch (err) {
-        console.error(err);
-        return res.status(400).json({ error: err.message });
-    }
 
-    // 3. Create and Save New Course Instance
-    const newCourse = new Course({
-        _id: new mongoose.Types.ObjectId,
-        name: req.body.name,
-        max_seats: Number(req.body.max_seats),
-        start_date: new Date(req.body.start_date),
-        courseImage: req.file.path,
-        instructor: instructorId 
-    });
+        // 3. Create and Save New Course Instance
+        const newCourse = new Course({
+            _id: new mongoose.Types.ObjectId,
+            name: req.body.name,
+            max_seats: Number(req.body.max_seats),
+            start_date: new Date(req.body.start_date),
+            courseImage: req.file.path,
+            instructor
+        });
 
-    try {
         const savedCourse = await newCourse.save();
         console.log(savedCourse);
 
@@ -121,7 +113,7 @@ router.post('/', upload.single('courseImage'), async (req, res, next) => {
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Failed to create course' });
+        return res.status(400).json({ error: err.message });
     }
 });
 

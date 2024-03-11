@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
+const Instructor = require('./instructor');
 
 const courseSchema = mongoose.Schema({
   instructor_id: {
-    id: mongoose.Schema.Types.ObjectId,
-    ref: 'Instructor'
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'instructor' 
   },
   _id: mongoose.Schema.Types.ObjectId,
   name: {
