@@ -44,26 +44,35 @@ router.patch('/', async (req, res, next) => {
     }
 });
 
-//get lead by id
-router.get('/:leadId', (req, res, next) => {
+const mongoose = require('mongoose');
+
+// get lead by id
+router.get('/:leadId', async (req, res, next) => {
     const id = req.params.leadId;
 
-    Lead.findById(id)
-        .exec()
-        .then(result => {
-            console.log(result);
+    // Validate if the provided ID is a valid ObjectId
+    if (!mongoose.isValidObjectId(id)) {
+        return res.status(400).json({ message: 'Invalid lead ID' });
+    }
+
+    try {
+        const result = await Lead.findById(id).exec();
+
+        console.log(result);
+        if (result) {
             res.status(200).json({
                 message: 'Lead found successfully',
                 lead: result
             });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
+        } else {
+            res.status(404).json({ message: 'No valid entry found for provided ID' });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
 });
+
 
 //lead can update their details
 router.patch('/:leadId', async (req, res, next) => {

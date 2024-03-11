@@ -5,6 +5,7 @@ const Comment = require('../models/comment');
 const Lead = require('../models/lead');
 const Instructor = require('../models/instructor');
 
+//instructor can post comment for lead
 router.post('/', async (req, res, next) => {
     try {
         const { lead_id, instructor_id, comment_text } = req.body;

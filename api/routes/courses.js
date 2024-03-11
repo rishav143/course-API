@@ -32,25 +32,7 @@ const Course = require('../models/course');
 const Lead = require('../models/lead');
 const Instructor = require('../models/instructor');
 
-router.get('/:courseId', (req, res, next) => {
-    const id = req.params.courseId;
-    Course.findById(id)
-        .select('name max_seats start_date _id')
-        .exec()
-        .then(doc => {
-            console.log(doc);
-            if (doc) {
-                res.status(200).json(doc);
-            } else {
-                res.status(404).json({ message: 'No valid entry found for provided ID' });
-            }
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: err });
-        });
-});
-
+// instructor can create course
 router.post('/', upload.single('course_image'), async (req, res, next) => {
     // Validate Image Upload
     if (!req.file) {
@@ -117,7 +99,31 @@ router.post('/', upload.single('course_image'), async (req, res, next) => {
     }
 });
 
+// get course by id
+router.get('/:courseId', async (req, res, next) => {
+    const id = req.params.courseId;
 
+    // Validate if the provided ID is a valid ObjectId
+    if (!mongoose.isValidObjectId(id)) {
+        return res.status(400).json({ message: 'Invalid course ID' });
+    }
+
+    try {
+        const doc = await Course.findById(id).select('name max_seats start_date _id');
+
+        console.log(doc);
+        if (doc) {
+            res.status(200).json(doc);
+        } else {
+            res.status(404).json({ message: 'No valid entry found for provided ID' });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// lead can register
 router.post('/:courseId', async (req, res, next) => {
     try {
         // Validate course ID in existing database
@@ -174,7 +180,7 @@ router.post('/:courseId', async (req, res, next) => {
     }
 });
 
-
+//instructor can update course
 router.patch('/:courseId', upload.single('course_image'), async (req, res, next) => {
     try {
         const id = req.params.courseId;
@@ -210,7 +216,5 @@ router.patch('/:courseId', upload.single('course_image'), async (req, res, next)
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
-
 
 module.exports = router;
