@@ -175,30 +175,36 @@ router.post('/:courseId', async (req, res, next) => {
 });
 
 
-router.patch('/:courseId', (req, res, next) => {
-    const id = req.params.courseId;
-    const updateOps = {};
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
-    }
-    Course.updateMany({ _id: id }, { $set: updateOps })
-        .exec()
-        .then(result => {
-            console.log(result);
-            res.status(200).json({
-                message: 'Course updated',
-                request: {
-                    type: 'GET',
-                    url: 'http://localhost:3000/courses/' + id
-                }
-            });
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
+router.patch('/:courseId', async (req, res, next) => {
+    try {
+        // Validate course ID
+        if (!mongoose.Types.ObjectId.isValid(req.params.courseId)) {
+            return res.status(400).json({ error: 'Invalid course ID' });
+        }
+
+        const courseId = req.params.courseId;
+        const updates = req.body;
+
+        // update the course
+        const updatedCourse = await Course.updateOne({ _id: courseId }, { $set: updates });
+
+        // Check if course was updated
+        if (!updatedCourse.modifiedCount) {
+            return res.status(404).json({ error: 'Course not found' });
+        }
+
+        res.status(200).json({
+            message: 'Course updated successfully',
+            request: {
+                type: 'GET',
+                url: `http://localhost:3000/courses/${courseId}`, 
+            },
         });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
+
 
 module.exports = router;
