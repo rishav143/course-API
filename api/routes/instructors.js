@@ -44,7 +44,7 @@ router.post('/', (req, res, next) => {
                 instructor: result,
                 request: {
                     type: 'GET',
-                    url: 'https://localhost:3000/instructors/' + newId 
+                    url: 'http://localhost:3000/instructors/' + newId 
                 }
             });
         })
@@ -72,7 +72,7 @@ router.patch('/:instructorId', (req, res, next) => {
                 message: 'Instructor updated',
                 request: {
                     type: 'GET',
-                    url: 'https://localhost:3000/instructors/' + id
+                    url: 'http://localhost:3000/instructors/' + id
                 }
             });
         })

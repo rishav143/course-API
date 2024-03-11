@@ -52,7 +52,7 @@ router.get('/:courseId', (req, res, next) => {
 });
 
 router.post('/', upload.single('courseImage'), async (req, res, next) => {
-    // 1. Validate Image Upload
+    // Validate Image Upload
     if (!req.file) {
         return res.status(400).json({ error: 'No image file uploaded' });
     }
@@ -86,7 +86,7 @@ router.post('/', upload.single('courseImage'), async (req, res, next) => {
             throw new Error('Invalid instructor ID');
         }
 
-        // 3. Create and Save New Course Instance
+        // Create and Save New Course Instance
         const newCourse = new Course({
             _id: new mongoose.Types.ObjectId,
             name: req.body.name,
@@ -107,7 +107,7 @@ router.post('/', upload.single('courseImage'), async (req, res, next) => {
                 start_date: savedCourse.start_date,
                 request: {
                     type: 'GET',
-                    url: `http://localhost:3000/courses/${savedCourse._id}` 
+                    url: `http://localhost:3000/courses/${savedCourse._id}`
                 }
             }
         });
@@ -118,13 +118,32 @@ router.post('/', upload.single('courseImage'), async (req, res, next) => {
 });
 
 
-
-router.post('/:courseId/register', async (req, res, next) => {
+router.post('/:courseId', async (req, res, next) => {
     try {
-        // Validate course ID
+        // Validate course ID in existing database
         const courseId = req.params.courseId;
         if (!mongoose.Types.ObjectId.isValid(courseId)) {
             return res.status(400).json({ error: 'Invalid course ID' });
+        }
+
+        //validate the email id
+        const email = req.body.email;
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        if (!isValidEmail(email)) {
+            return res.status(400).json({ error: 'Invalid email' });
+        }
+
+        //validate linkedin profile
+        const linkedin_id = req.body.linkedin_profile;
+        function isLinkedInUrl(url) {
+            const linkedInRegex = /^(https?:\/\/)?([\w-]+(\.[\w-]+)+\/?)([^\s]*)?$/;
+            return linkedInRegex.test(url);
+        }
+        if (!isLinkedInUrl(linkedin_id)) {
+            return res.status(400).json({ error: 'Invalid linkedin url' });
         }
 
         // Create new lead
@@ -132,9 +151,9 @@ router.post('/:courseId/register', async (req, res, next) => {
         const newStudent = new Lead({
             _id: newId,
             name: req.body.name,
-            email: req.body.email,
+            email: email,
             phone: req.body.phone,
-            linkedin_profile: req.body.linkedin_profile,
+            linkedin_profile: linkedin_id,
             status: 'Pending',
         });
 
@@ -146,7 +165,7 @@ router.post('/:courseId/register', async (req, res, next) => {
             message: 'Student registered successfully',
             request: {
                 type: 'GET',
-                url: `https://localhost:3000/leads/${newId}`,
+                url: `http://localhost:3000/leads/${newId}`,
             },
         });
     } catch (err) {
@@ -170,7 +189,7 @@ router.patch('/:courseId', (req, res, next) => {
                 message: 'Course updated',
                 request: {
                     type: 'GET',
-                    url: 'https://localhost:3000/courses/' + id
+                    url: 'http://localhost:3000/courses/' + id
                 }
             });
         })

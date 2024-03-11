@@ -38,7 +38,7 @@ router.patch('/:leadId', (req, res, next) => {
                 message: 'Lead updated',
                 request: {
                     type: 'GET',
-                    url: 'https://localhost:3000/leads/' + id
+                    url: 'http://localhost:3000/leads/' + id
                 }
             });
         })
