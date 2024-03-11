@@ -74,9 +74,8 @@ router.get('/:instructorId', async (req, res, next) => {
 // update instructor details by id
 router.patch('/:instructorId', async (req, res, next) => {
     try {
-        const id = req.params.instructorId;
-
         // Find the instructor by ID
+        const id = req.params.instructorId;
         const instructor = await Instructor.findById(id).exec();
 
         if (!instructor) {
