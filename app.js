@@ -2,12 +2,12 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-
 const mongoose = require('mongoose');
 
 const courseRoutes = require('./api/routes/courses');
 const leadRoutes = require('./api/routes/leads');
 const commentRoutes = require('./api/routes/comments');
+const instructorRoutes = require('./api/routes/instructors');
 
 mongoose.connect(
     "mongodb+srv://rc8344353:" +
@@ -15,7 +15,10 @@ mongoose.connect(
     "@course-api.wit0kps.mongodb.net/?retryWrites=true&w=majority&appName=course-API"
 )
 
+mongoose.Promise = global.Promise;
+
 app.use(morgan('dev'));
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -37,6 +40,7 @@ app.use((req, res, next) => {
 app.use('/courses', courseRoutes);
 app.use('/leads', leadRoutes);
 app.use('/comments', commentRoutes);
+app.use('/instructors', instructorRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');

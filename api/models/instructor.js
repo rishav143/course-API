@@ -1,17 +1,21 @@
 const mongoose = require('mongoose');
 
 const instructorSchema = mongoose.Schema({
-    instructor_id: mongoose.Types.ObjectId,
-    name: String,
-    email:  String,
-    phone: Number,
-    skills: [String],
-    education: [{
-        institution: String,
-        degree: String,
-        fieldOfStudy: String,
-        completionDate: Date
-    }]
+    _id: mongoose.Schema.Types.ObjectId,
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    phone: {
+        type: Number,
+        required: true
+    },
+    skill: String,
+    education: String
 });
 
-module.exports = mongoose.model('Instructor', leadSchema);
+module.exports = mongoose.model('Instructor', instructorSchema);

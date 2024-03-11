@@ -10,10 +10,10 @@ const leadSchema = mongoose.Schema({
         type: String,
         enum: ['Pending', 'Accepted', 'Rejected', 'Waitlist']
     },
-    // course_id: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Course'
-    // }
+    course_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course'
+    }
 });
 
 module.exports = mongoose.model('Lead', leadSchema);
