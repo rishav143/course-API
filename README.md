@@ -1,3 +1,5 @@
+# Notice
+Project is currently in the working stage.
 # course-API
 Design database and APIs for application based courses on Airtribe.
 # Description
