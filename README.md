@@ -3,7 +3,7 @@ Project is currently in the working stage.
 # course-API
 Design database and APIs for application based courses on Airtribe.
 # Description
-![d](https://github.com/rishav143/course-API/assets/93703303/af636748-96fe-4aeb-b9ab-8d85041073a8)
+![d (1)](https://github.com/rishav143/course-API/assets/93703303/807488cb-2432-4d05-a59a-1e679840d6f6)
 # Usage
 1. Open project's configuration file, named nodemon.json.
 2. Add the following environment variable with your MongoDB Atlas password:
