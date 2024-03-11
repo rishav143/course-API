@@ -51,7 +51,7 @@ router.get('/:courseId', (req, res, next) => {
         });
 });
 
-router.post('/', upload.single('courseImage'), async (req, res, next) => {
+router.post('/', upload.single('course_image'), async (req, res, next) => {
     // Validate Image Upload
     if (!req.file) {
         return res.status(400).json({ error: 'No image file uploaded' });
@@ -92,7 +92,7 @@ router.post('/', upload.single('courseImage'), async (req, res, next) => {
             name: req.body.name,
             max_seats: Number(req.body.max_seats),
             start_date: new Date(req.body.start_date),
-            courseImage: req.file.path,
+            course_image: req.file.path,
             instructor
         });
 
@@ -175,29 +175,34 @@ router.post('/:courseId', async (req, res, next) => {
 });
 
 
-router.patch('/:courseId', async (req, res, next) => {
+router.patch('/:courseId', upload.single('course_image'), async (req, res, next) => {
     try {
+        const id = req.params.courseId;
+
         // Validate course ID
-        if (!mongoose.Types.ObjectId.isValid(req.params.courseId)) {
-            return res.status(400).json({ error: 'Invalid course ID' });
+        const course = await Course.findById(id).exec();
+        if (!course) {
+            return res.status(404).json({ message: 'Course not found' });
         }
 
-        const courseId = req.params.courseId;
-        const updates = req.body;
+        const { name, max_seats, start_date } = req.body;
+        const imgPath = req.file.path;
+        const updates = {};
 
-        // update the course
-        const updatedCourse = await Course.updateOne({ _id: courseId }, { $set: updates });
+        // Update specific fields
+        if (name) updates.name = name;
+        if (max_seats) updates.max_seats = max_seats;
+        if (start_date) updates.start_date = start_date;
+        if (imgPath) updates.course_image = imgPath;
 
-        // Check if course was updated
-        if (!updatedCourse.modifiedCount) {
-            return res.status(404).json({ error: 'Course not found' });
-        }
+        const updatedCourse = await Course.findByIdAndUpdate(id, updates, { new: true }).exec();
 
         res.status(200).json({
             message: 'Course updated successfully',
+            course: updatedCourse,
             request: {
                 type: 'GET',
-                url: `http://localhost:3000/courses/${courseId}`, 
+                url: `http://localhost:3000/courses/${id}`,
             },
         });
     } catch (err) {
@@ -205,6 +210,7 @@ router.patch('/:courseId', async (req, res, next) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 
 module.exports = router;

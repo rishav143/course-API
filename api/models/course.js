@@ -19,7 +19,7 @@ const courseSchema = mongoose.Schema({
     type: Date,
     required: true
   },
-  courseImage: { 
+  course_image: { 
     type: String,
     required: true
   }

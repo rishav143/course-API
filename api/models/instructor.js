@@ -14,8 +14,8 @@ const instructorSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-    skill: String,
-    education: String
+    skills: [String],
+    education: [String]
 });
 
 module.exports = mongoose.model('Instructor', instructorSchema);
