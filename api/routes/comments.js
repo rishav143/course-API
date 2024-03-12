@@ -4,6 +4,7 @@ const router = express();
 const Comment = require('../models/comment');
 const Lead = require('../models/lead');
 const Instructor = require('../models/instructor');
+const { default: mongoose } = require('mongoose');
 
 //instructor can post comment for lead
 router.post('/', async (req, res, next) => {
@@ -21,11 +22,16 @@ router.post('/', async (req, res, next) => {
             Instructor.findById(instructor_id),
         ]);
 
-        if (!lead || !instructor) {
+        if (!instructor) {
             return res.status(404).json({ error: 'Please sign up if not already registered.' });
         }
 
+        if(!lead) {
+            return res.status(404).json({ error: 'Please enter vaild lead id.' });
+        }
+
         const newComment = new Comment({
+            _id: new mongoose.Types.ObjectId,
             lead_id,
             instructor_id,
             comment_text,
