@@ -4,7 +4,7 @@ const router = express();
 const Lead = require('../models/lead');
 const Instructor = require('../models/instructor');
 
-// instructor can change lead id
+// instructor can change lead status
 router.patch('/', async (req, res, next) => {
     try {
         const { status, lead_id, instructor_id } = req.body;
