@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express();
+const mongoose = require('mongoose');
 
 const Lead = require('../models/lead');
 const Instructor = require('../models/instructor');
 
-// instructor can change lead id
+// instructor can change lead status
 router.patch('/', async (req, res, next) => {
     try {
         const { status, lead_id, instructor_id } = req.body;
@@ -43,8 +44,6 @@ router.patch('/', async (req, res, next) => {
         res.status(500).json({ error: 'An error occurred during update' });
     }
 });
-
-const mongoose = require('mongoose');
 
 // get lead by id
 router.get('/:leadId', async (req, res, next) => {
