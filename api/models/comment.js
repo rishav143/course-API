@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const commentSchema = mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
   lead_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Lead', // Reference the Lead model
@@ -15,7 +16,6 @@ const commentSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  _id: mongoose.Schema.Types.ObjectId,
   message: String,
   createdAt: {
     type: Date,
