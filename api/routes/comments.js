@@ -21,10 +21,6 @@ router.post('/', async (req, res, next) => {
             Instructor.findById(instructor_id),
         ]);
 
-        if (!lead || !instructor) {
-            return res.status(404).json({ error: 'Please sign up if not already registered.' });
-        }
-
         const newComment = new Comment({
             lead_id,
             instructor_id,
