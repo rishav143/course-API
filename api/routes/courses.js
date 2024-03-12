@@ -62,6 +62,12 @@ router.post('/', upload.single('course_image'), async (req, res, next) => {
             throw new Error('Invalid start_date format (YYYY-MM-DD)');
         }
 
+        // Compare startDate with currentDate
+        const currentDate = new Date();
+        if (startDate <= currentDate) {
+            throw new Error('Start date must be greater than the current date');
+        }
+
         //validate instructor id in existing database
         const instructor = await Instructor.findById(instructor_id);
         if (!instructor) {
